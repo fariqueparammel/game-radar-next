@@ -11,7 +11,7 @@ export default function RedeemButton({ gameUrl }: RedeemButtonProps) {
 
   return (
     <button
-      className="btn btn-success"
+      className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded"
       onClick={() => (location.href = gameUrl)}
     >
       Redeem

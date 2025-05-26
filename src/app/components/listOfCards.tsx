@@ -76,7 +76,7 @@ export default function ListOfCards({
     // <div>
     <>
       {gameDetails.map((item, index) => (
-        <div className="d-flex min-vw-100 justify-content-center">
+        <div className="flex min-w-full justify-center">
           <CardDisplay
             key={index}
             gameName={item.title}
