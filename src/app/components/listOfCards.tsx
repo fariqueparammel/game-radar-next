@@ -29,6 +29,9 @@ export default function ListOfCards({
   useEffect(() => {
     async function fetchData() {
       const gameData = await fetch("/api/epicStoreApi");
+      // const steamGameData = await fetch("/api/steamApi");
+      // console.log("steamTest" + (await steamGameData.json()));
+      // console.log(steamData);
       // console.log(gameData.json);
       data = await gameData.json();
       // data = gameData;
