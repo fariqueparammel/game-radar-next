@@ -1,8 +1,16 @@
-import scraper from "@/lib/scraper";
-export default async function test() {
-return await scraper();
-}
+// src/app/api/steamApi/route.ts
+import { scraper } from '@/lib/scraper';
 
+export async function GET() {
+  try {
+    const result = await scraper();
+    return Response.json(result);
+  } catch (error) {
+    console.error('Scraping failed:', error);
+    return Response.json(error);
+    ;
+  }
+}
 
 
 
