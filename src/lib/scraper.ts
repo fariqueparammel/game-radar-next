@@ -1,34 +1,74 @@
-import puppeteer from 'puppeteer';
-import { Cheerio } from 'cheerio';
+import * as cheerio from "cheerio";
+import puppeteer from "puppeteer";
 
-export default async function scraper ()  {
-  // Launch the browser and open a new blank page
-  const browser = await puppeteer.launch();
+export async function scraper() {
+  const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-
-  // Navigate the page to a URL
-  await page.goto('https://developer.chrome.com/');
+  await page.goto("https://steamdb.info/upcoming/free/");
 
   // Set screen size
-  await page.setViewport({width: 1080, height: 1024});
-
-  // Type into search box
-  await page.type('.devsite-search-field', 'automate beyond recorder');
-
-  // Wait and click on first result
-  const searchResultSelector = '.devsite-result-item-link';
-  await page.waitForSelector(searchResultSelector);
-  await page.click(searchResultSelector);
-
-  // Locate the full title with a unique string
-  const textSelector = await page.waitForSelector(
-    'text/Customize and automate',
-  );
-  const fullTitle = await textSelector?.evaluate(el => el.textContent);
-
-  // Print the full title
-  console.log('The title of this blog post is "%s".', fullTitle);
-
+  await page.setViewport({ width: 1080, height: 1024 });
+  const html = await page.content();
+  const $ = cheerio.load(html);
+  console.log($);
   await browser.close();
-  return fullTitle;
-}scraper();
+  return html;
+}
+
+// puppeteer scraping for steam
+
+// import puppeteer from "puppeteer";
+
+// interface Game {
+//   title: string;
+//   description: string;
+//   image: string;
+//   updatedTime: string;
+//   keyImages: {
+//     type: string;
+//     url: string;
+//   };
+//   effectiveDate: string;
+//   gameUrl: string;
+// }
+
+// export async function scraper() {
+//   const browser = await puppeteer.launch({ headless: false, devtools: true });
+//   const page = await browser.newPage();
+
+//   // page.setDefaultTimeout(0);
+//   await page.goto("https://store.steampowered.com/");
+//   let willClick = false;
+
+//   const elementData = await page.$$eval("a.big_button", (el) =>
+//     el.map((e) => e.textContent)
+//   );
+
+//   debugger;
+//   const data: string[] = elementData.map((el: any) => el.trim());
+//   async function clickOnSpecials() {
+//     if (
+//       data.includes("SPECIALS") ||
+//       data.includes("Specials") ||
+//       data.includes("specials")
+//     ) {
+//       willClick = true;
+//       const variations = ["SPECIALS", "Specials", "specials"];
+//       let indexOfSpecial: number = -1;
+
+//       for (const variant of variations) {
+//         indexOfSpecial = data.indexOf(variant);
+//         if (indexOfSpecial !== -1) break;
+//       }
+//       const clickAnchor = await page.$$("a.big_button");
+//       console.log(indexOfSpecial);
+//       await clickAnchor[indexOfSpecial].click();
+//       console.log(elementData);
+//     }
+//   }
+//   await clickOnSpecials();
+
+//   await browser.close();
+//   return willClick;
+// }
+// scraper();
